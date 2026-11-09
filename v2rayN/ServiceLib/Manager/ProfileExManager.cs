@@ -163,6 +163,16 @@ public class ProfileExManager
 
         profileEx.IpInfo = ipInfo;
         IndexIdEnqueue(indexId);
+
+    }
+
+    public void SetTestIpPurity(string indexId, int purity, string? purityInfo)
+    {
+        var profileEx = GetProfileExItem(indexId);
+
+        profileEx.IpPurity = purity;
+        profileEx.IpPurityInfo = purityInfo;
+        IndexIdEnqueue(indexId);
     }
 
     public void SetSort(string indexId, int sort)

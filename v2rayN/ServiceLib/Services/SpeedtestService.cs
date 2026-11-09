@@ -114,6 +114,11 @@ public class SpeedtestService(Config config, Func<SpeedTestResult, Task> updateF
                     await RunMixedTestAsync(lstSelected, completedIds, _config.SpeedTestItem.MixedConcurrencyCount, true,
                         ct);
                     break;
+
+                case ESpeedActionType.IpPurityTest:
+                    await RunIpPurityTestAsync(lstSelected, completedIds, _config.SpeedTestItem.MixedConcurrencyCount,
+                        ct);
+                    break;
             }
         }
         catch (OperationCanceledException) when (ct.IsCancellationRequested)
@@ -167,7 +172,7 @@ public class SpeedtestService(Config config, Func<SpeedTestResult, Task> updateF
         //clear test result
         await SetTestResultAsync(lstSelected, actionType, ResUI.Speedtesting).ConfigureAwait(false);
 
-        if (lstSelected.Count > 1 && (actionType == ESpeedActionType.Speedtest || actionType == ESpeedActionType.Mixedtest))
+        if (lstSelected.Count > 1 && (actionType == ESpeedActionType.Speedtest || actionType == ESpeedActionType.Mixedtest || actionType == ESpeedActionType.IpPurityTest))
         {
             NoticeManager.Instance.Enqueue(ResUI.SpeedtestingPressEscToExit);
         }
@@ -196,6 +201,12 @@ public class SpeedtestService(Config config, Func<SpeedTestResult, Task> updateF
                 case ESpeedActionType.Mixedtest:
                     ProfileExManager.Instance.SetTestSpeed(it.IndexId, 0);
                     await UpdateFunc(it.IndexId, message, message);
+                    break;
+
+                case ESpeedActionType.IpPurityTest:
+                    // A skipped or failed test must not leave the last purity behind for sorting.
+                    ProfileExManager.Instance.SetTestIpPurity(it.IndexId, 0, message);
+                    await UpdateIpPurityFunc(it.IndexId, message);
                     break;
             }
         }
@@ -488,6 +499,83 @@ public class SpeedtestService(Config config, Func<SpeedTestResult, Task> updateF
         });
     }
 
+    private async Task RunIpPurityTestAsync(List<ServerTestItem> selecteds,
+        ConcurrentDictionary<string, byte> completedIds, int concurrencyCount,
+        CancellationToken ct = default)
+    {
+        var parallelOptions = new ParallelOptions
+        {
+            MaxDegreeOfParallelism = Math.Max(concurrencyCount, 1),
+            CancellationToken = ct,
+        };
+
+        await Parallel.ForEachAsync(selecteds, parallelOptions, async (it, innerCt) =>
+        {
+            innerCt.ThrowIfCancellationRequested();
+
+            ProcessService processService = null;
+            try
+            {
+                processService = await CoreManager.Instance.LoadCoreConfigSpeedtest(it);
+                if (processService is null)
+                {
+                    await UpdateFunc(it.IndexId, "", ResUI.FailedToRunCore);
+                    await UpdateIpPurityFunc(it.IndexId, ResUI.FailedToRunCore);
+                    return;
+                }
+
+                await Task.Delay(1000, innerCt);
+
+                await DoIpPurityTest(it, completedIds, innerCt);
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Logging.SaveLog(_tag, ex);
+            }
+            finally
+            {
+                if (processService != null)
+                {
+                    await processService.StopAsync();
+                }
+            }
+        });
+    }
+
+    private async Task DoIpPurityTest(ServerTestItem it,
+        ConcurrentDictionary<string, byte> completedIds, CancellationToken ct = default)
+    {
+        await UpdateIpPurityFunc(it.IndexId, ResUI.Speedtesting);
+
+        var handler = HttpClientHelper.CreateProxySocketsHttpHandler(it.Port, new());
+        var timeout = Math.Max(_config.SpeedTestItem.SpeedTestTimeout, 10);
+        using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
+        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, timeoutCts.Token);
+        var linkedCt = linkedCts.Token;
+        using var downloadHandle = new DownloadService
+        {
+            Handler = handler,
+            DisposeHandler = true,
+        };
+
+        var result = await ConnectionHandler.GetIpPurityInfo(downloadHandle, linkedCt);
+        if (result is null)
+        {
+            await UpdateIpPurityFunc(it.IndexId, ResUI.SpeedtestingSkip);
+            ProfileExManager.Instance.SetTestIpPurity(it.IndexId, 0, ResUI.SpeedtestingSkip);
+            completedIds.TryAdd(it.IndexId, 0);
+            return;
+        }
+
+        var purity = result.Value;
+        ProfileExManager.Instance.SetTestIpPurity(it.IndexId, purity.Purity, purity.Type);
+        await UpdateIpPurityFunc(it.IndexId, purity.ToString());
+        completedIds.TryAdd(it.IndexId, 0);
+    }
     private async Task<int> DoRealPing(ServerTestItem it,
         ConcurrentDictionary<string, byte> completedIds, CancellationToken ct = default)
     {
@@ -657,5 +745,10 @@ public class SpeedtestService(Config config, Func<SpeedTestResult, Task> updateF
     private async Task UpdateIpInfoFunc(string indexId, string ip)
     {
         await _updateFunc?.Invoke(new() { IndexId = indexId, IpInfo = ip });
+    }
+
+    private async Task UpdateIpPurityFunc(string indexId, string ipPurity)
+    {
+        await _updateFunc?.Invoke(new() { IndexId = indexId, IpPurityInfo = ipPurity });
     }
 }

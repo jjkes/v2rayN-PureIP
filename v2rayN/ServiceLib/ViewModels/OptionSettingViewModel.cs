@@ -65,6 +65,7 @@ public partial class OptionSettingViewModel : MyReactiveObject, ICloseable
     [Reactive] public partial string SrsFileSourceUrl { get; set; }
     [Reactive] public partial string RoutingRulesSourceUrl { get; set; }
     [Reactive] public partial string IPAPIUrl { get; set; }
+    [Reactive] public partial string IpPurityUrl { get; set; }
     [Reactive] public partial string RootCertProvider { get; set; }
 
     #endregion UI
@@ -200,6 +201,7 @@ public partial class OptionSettingViewModel : MyReactiveObject, ICloseable
         SrsFileSourceUrl = _config.ConstItem.SrsSourceUrl;
         RoutingRulesSourceUrl = _config.ConstItem.RouteRulesTemplateSourceUrl;
         IPAPIUrl = _config.SpeedTestItem.IPAPIUrl;
+        IpPurityUrl = _config.SpeedTestItem.IpPurityUrl;
         RootCertProvider = _config.GuiItem.RootCertProvider;
 
         #endregion UI
@@ -380,6 +382,7 @@ public partial class OptionSettingViewModel : MyReactiveObject, ICloseable
         _config.ConstItem.SrsSourceUrl = SrsFileSourceUrl;
         _config.ConstItem.RouteRulesTemplateSourceUrl = RoutingRulesSourceUrl;
         _config.SpeedTestItem.IPAPIUrl = IPAPIUrl;
+        _config.SpeedTestItem.IpPurityUrl = IpPurityUrl;
         _config.GuiItem.RootCertProvider = RootCertProvider;
 
         //systemProxy

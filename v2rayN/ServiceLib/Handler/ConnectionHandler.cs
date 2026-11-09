@@ -146,4 +146,59 @@ public static class ConnectionHandler
             return null;
         }
     }
+
+    /// <summary>
+    /// Gets IP purity information (ippure API) using the given proxy handler.
+    /// </summary>
+    public static async Task<IpPurityResult?> GetIpPurityInfo(DownloadService downloadHandle,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var url = AppManager.Instance.Config.SpeedTestItem.IpPurityUrl;
+            if (url.IsNullOrEmpty())
+            {
+                return null;
+            }
+            var result = await downloadHandle.TryDownloadString(url, cancellationToken);
+            if (result.IsNullOrEmpty())
+            {
+                return null;
+            }
+            return ParseIpPurity(result);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public static IpPurityResult? ParseIpPurity(string? json)
+    {
+        try
+        {
+            if (json.IsNullOrEmpty())
+            {
+                return null;
+            }
+            var info = JsonUtils.Deserialize<IpPurityInfo>(json);
+            if (info?.fraudScore is null)
+            {
+                return null;
+            }
+            var purity = Math.Clamp(100 - info.fraudScore.Value, 0, 100);
+            var type = info.isBroadcast == true
+                ? ResUI.IpPurityBroadcast
+                : info.isResidential == true ? ResUI.IpPurityResidential : ResUI.IpPurityHosting;
+            return new IpPurityResult(purity, type, info.ip);
+        }
+        catch
+        {
+            return null;
+        }
+    }
 }

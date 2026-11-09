@@ -87,6 +87,15 @@
                             <PathIcon Data="{StaticResource building_ping}" />
                         </Button.Content>
                     </Button>
+                    <Button
+                        x:Name="btnIpPurityTest"
+                        Margin="{StaticResource MarginLr4}"
+                        Classes="IconButton Success"
+                        ToolTip.Tip="{x:Static resx:ResUI.menuIpPurityTestServer}">
+                        <Button.Content>
+                            <PathIcon Data="M12 1.8 L20 5.4 V11 C20 16.9 16.5 20.4 12 22.2 C7.5 20.4 4 16.9 4 11 V5.4 Z M8.7 11.6 L10.9 13.9 L15.2 9.3" />
+                        </Button.Content>
+                    </Button>
 
                 </StackPanel>
 
@@ -142,6 +151,10 @@
                             Header="{x:Static resx:ResUI.menuSpeedServer}"
                             InputGesture="Ctrl+T" />
                         <MenuItem x:Name="menuUdpTestServer" Header="{x:Static resx:ResUI.menuUdpTestServer}" />
+                        <MenuItem
+                            x:Name="menuIpPurityTestServer"
+                            Header="{x:Static resx:ResUI.menuIpPurityTestServer}"
+                            InputGesture="Ctrl+P" />
                         <MenuItem x:Name="menuSortServerResult" Header="{x:Static resx:ResUI.menuSortServerResult}" />
                         <Separator />
                         <MenuItem
@@ -307,6 +320,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+
+                    <DataGridTextColumn
+                        Width="110"
+                        Binding="{Binding IpPurityVal}"
+                        Header="{x:Static resx:ResUI.LvTestIpPurity}"
+                        IsReadOnly="True"
+                        SortMemberPath="IpPurity"
+                        Tag="IpPurityVal" />
 
                     <DataGridTextColumn
                         Width="100"

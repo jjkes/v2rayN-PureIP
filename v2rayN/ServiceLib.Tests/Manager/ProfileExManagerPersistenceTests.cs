@@ -17,6 +17,7 @@ public class ProfileExManagerPersistenceTests
                 manager.SetTestSpeed(id, 12.5m);
                 manager.SetTestMessage(id, "completed");
                 manager.SetTestIpInfo(id, "192.0.2.1");
+                manager.SetTestIpPurity(id, 96, "Residential");
                 manager.SetSort(id, 7);
             }
 
@@ -31,6 +32,8 @@ public class ProfileExManagerPersistenceTests
                 await saved[0].Speed.Should().BeEqualTo(12.5m);
                 await saved[0].Message.Should().BeEqualTo("completed");
                 await saved[0].IpInfo.Should().BeEqualTo("192.0.2.1");
+                await saved[0].IpPurity.Should().BeEqualTo(96);
+                await saved[0].IpPurityInfo.Should().BeEqualTo("Residential");
                 await saved[0].Sort.Should().BeEqualTo(7);
             }
         }

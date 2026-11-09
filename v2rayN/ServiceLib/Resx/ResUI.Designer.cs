@@ -5624,5 +5624,59 @@ namespace ServiceLib.Resx {
                 return ResourceManager.GetString("TransportPathTip6", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 IP purity test 的本地化字符串。
+        /// </summary>
+        public static string menuIpPurityTestServer {
+            get {
+                return ResourceManager.GetString("menuIpPurityTestServer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 IP purity 的本地化字符串。
+        /// </summary>
+        public static string LvTestIpPurity {
+            get {
+                return ResourceManager.GetString("LvTestIpPurity", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 IP purity test URL 的本地化字符串。
+        /// </summary>
+        public static string TbSettingsIpPurityUrl {
+            get {
+                return ResourceManager.GetString("TbSettingsIpPurityUrl", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 Residential 的本地化字符串。
+        /// </summary>
+        public static string IpPurityResidential {
+            get {
+                return ResourceManager.GetString("IpPurityResidential", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 Hosting 的本地化字符串。
+        /// </summary>
+        public static string IpPurityHosting {
+            get {
+                return ResourceManager.GetString("IpPurityHosting", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 Broadcast 的本地化字符串。
+        /// </summary>
+        public static string IpPurityBroadcast {
+            get {
+                return ResourceManager.GetString("IpPurityBroadcast", resourceCulture);
+            }
+        }
     }
 }

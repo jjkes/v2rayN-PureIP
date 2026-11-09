@@ -723,6 +723,12 @@ public class Global
         @""
     ];
 
+    public static readonly List<string> IpPurityUrls =
+    [
+        @"https://my.ippure.com/v1/info",
+        ""
+    ];
+
     public static readonly List<string> UdpTestTargets =
     [
         "ntp:pool.ntp.org",

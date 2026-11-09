@@ -13,6 +13,7 @@ public enum EServerColName
     DelayVal,
     SpeedVal,
     IpInfo,
+    IpPurityVal,
 
     TodayDown,
     TodayUp,

@@ -67,6 +67,8 @@ public partial class ProfilesView : ReactiveUserControl<ProfilesViewModel>
             this.BindCommand(ViewModel, vm => vm.SortServerResultCmd, v => v.menuSortServerResult).DisposeWith(disposables);
             this.BindCommand(ViewModel, vm => vm.RemoveInvalidServerResultCmd, v => v.menuRemoveInvalidServerResult).DisposeWith(disposables);
             this.BindCommand(ViewModel, vm => vm.FastRealPingCmd, v => v.btnFastRealPing).DisposeWith(disposables);
+            this.BindCommand(ViewModel, vm => vm.IpPurityTestServerCmd, v => v.btnIpPurityTest).DisposeWith(disposables);
+            this.BindCommand(ViewModel, vm => vm.IpPurityTestServerCmd, v => v.menuIpPurityTestServer).DisposeWith(disposables);
 
             //servers export
             this.BindCommand(ViewModel, vm => vm.Export2ClientConfigCmd, v => v.menuExport2ClientConfig).DisposeWith(disposables);
@@ -277,6 +279,9 @@ public partial class ProfilesView : ReactiveUserControl<ProfilesViewModel>
                 case Key.E:
                     ViewModel?.ServerSpeedtest(ESpeedActionType.Mixedtest);
                     break;
+                case Key.P:
+                    ViewModel?.ServerSpeedtest(ESpeedActionType.IpPurityTest);
+                    break;
             }
         }
         else
@@ -393,6 +398,10 @@ public partial class ProfilesView : ReactiveUserControl<ProfilesViewModel>
                         if (item.Name.Equals("IpInfo", StringComparison.CurrentCultureIgnoreCase))
                         {
                             item2.IsVisible = _config.SpeedTestItem.IPAPIUrl.IsNotEmpty() && !_config.UiItem.HideColumnIpInfo;
+                        }
+                        if (item.Name.Equals("IpPurityVal", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            item2.IsVisible = _config.SpeedTestItem.IpPurityUrl.IsNotEmpty();
                         }
                     }
                 }

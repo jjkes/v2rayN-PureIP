@@ -10,4 +10,6 @@ public class ProfileExItem
     public int Sort { get; set; }
     public string? Message { get; set; }
     public string? IpInfo { get; set; }
+    public int IpPurity { get; set; }
+    public string? IpPurityInfo { get; set; }
 }

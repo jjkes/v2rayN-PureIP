@@ -621,6 +621,7 @@ public sealed partial class V2rayRuntime(
                     delay,
                     speed,
                     extension?.IpInfo,
+                    extension?.IpPurity > 0 ? $"{extension.IpPurity}% {extension.IpPurityInfo}" : extension?.IpPurityInfo,
                     statistic?.TodayUp ?? 0,
                     statistic?.TodayDown ?? 0,
                     statistic?.TotalUp ?? 0,

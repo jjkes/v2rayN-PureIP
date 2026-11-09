@@ -1069,6 +1069,22 @@
                             Style="{StaticResource DefComboBox}" />
 
                         <TextBlock
+                            Grid.Row="21"
+                            Grid.Column="0"
+                            Margin="{StaticResource Margin8}"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource ToolbarTextBlock}"
+                            Text="{x:Static resx:ResUI.TbSettingsIpPurityUrl}" />
+                        <ComboBox
+                            x:Name="cmbIpPurityUrl"
+                            Grid.Row="21"
+                            Grid.Column="1"
+                            Width="300"
+                            Margin="{StaticResource Margin8}"
+                            IsEditable="True"
+                            Style="{StaticResource DefComboBox}" />
+
+                        <TextBlock
                             Grid.Row="22"
                             Grid.Column="0"
                             Margin="{StaticResource Margin8}"

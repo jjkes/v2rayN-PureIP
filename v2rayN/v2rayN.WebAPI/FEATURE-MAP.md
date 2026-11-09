@@ -19,6 +19,7 @@ is not registered. `RuntimeMutationGate` serializes API-side writes to configura
 | Move/reorder profiles | `ConfigHandler.MoveToGroup/MoveServer`; `ProfileExManager.SetSort` | `POST /api/profiles/move-to-group`; `POST /api/profiles/move` |
 | Sort profiles | `ConfigHandler.SortServers`; `EServerColName` | `POST /api/profiles/sort` |
 | Latency, UDP and speed tests | `SpeedtestService.RunLoop/ExitLoop`; `ESpeedActionType` | `POST /api/profiles/{id}/latency`; `POST/DELETE /api/speedtests`; progress/results through SSE |
+| IP purity test (ippure) | `SpeedtestService.RunIpPurityTestAsync`; `ConnectionHandler.GetIpPurityInfo`; `ESpeedActionType.IpPurityTest` | `POST /api/speedtests` with `action: IpPurityTest`; results carry `ipPurity` |
 | Share/export profiles and Core configuration | `FmtHandler.GetShareUri`; `InnerFmt.ToUri`; `CoreConfigContextBuilder.Build`; `CoreConfigHandler.GenerateClientConfig` | `POST /api/profiles/export` |
 | Generate all-node/regional groups | `ConfigHandler.AddGroupAllServer/AddGroupRegionServer` | `POST /api/profile-groups/generate/all`; `POST /api/profile-groups/generate/regions` |
 | Manage/share subscriptions | `SubItem`; `ConfigHandler.AddSubItem/DeleteSubItem`; `SubSettingViewModel` | `GET/POST/PUT/DELETE /api/subscriptions`; `GET /api/subscriptions/{id}/share` |

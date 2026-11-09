@@ -55,6 +55,7 @@ public sealed record ProfileView(
     int Delay,
     decimal Speed,
     string? IpInfo,
+    string? IpPurity,
     long TodayUp,
     long TodayDown,
     long TotalUp,
@@ -138,6 +139,7 @@ public sealed record SpeedTestSettingsView(
     string? SpeedPingTestUrl,
     int MixedConcurrencyCount,
     string? IPAPIUrl,
+    string? IpPurityUrl,
     string? UdpTestTarget);
 
 public sealed record WebSettingsOptionsView(
@@ -228,6 +230,7 @@ public sealed record SpeedTestSettingsInput(
     string SpeedPingTestUrl,
     int MixedConcurrencyCount,
     string IPAPIUrl,
+    string? IpPurityUrl,
     string UdpTestTarget);
 
 public sealed record RoutingSettingsInput(string? DomainStrategy, string? DomainStrategy4Singbox);

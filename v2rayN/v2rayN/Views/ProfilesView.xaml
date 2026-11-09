@@ -97,6 +97,16 @@
                     ToolTip="{x:Static resx:ResUI.menuMixedTestServer}">
                     <materialDesign:PackIcon VerticalAlignment="Center" Kind="Speedometer" />
                 </Button>
+                <Button
+                    x:Name="btnIpPurityTest"
+                    Width="30"
+                    Height="30"
+                    Margin="{StaticResource MarginLeftRight4}"
+                    AutomationProperties.Name="{x:Static resx:ResUI.menuIpPurityTestServer}"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                    ToolTip="{x:Static resx:ResUI.menuIpPurityTestServer}">
+                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="ShieldCheck" />
+                </Button>
             </WrapPanel>
             <DataGrid
                 x:Name="lstProfiles"
@@ -163,6 +173,11 @@
                             x:Name="menuUdpTestServer"
                             Height="{StaticResource MenuItemHeight}"
                             Header="{x:Static resx:ResUI.menuUdpTestServer}" />
+                        <MenuItem
+                            x:Name="menuIpPurityTestServer"
+                            Height="{StaticResource MenuItemHeight}"
+                            Header="{x:Static resx:ResUI.menuIpPurityTestServer}"
+                            InputGestureText="Ctrl+P" />
                         <MenuItem
                             x:Name="menuSpeedServer"
                             Height="{StaticResource MenuItemHeight}"
@@ -354,6 +369,13 @@
                         Binding="{Binding IpInfo}"
                         ExName="IpInfo"
                         Header="{x:Static resx:ResUI.LvTestIpInfo}" />
+
+                    <base:MyDGTextColumn
+                        x:Name="colIpPurity"
+                        Width="110"
+                        Binding="{Binding IpPurityVal}"
+                        ExName="IpPurityVal"
+                        Header="{x:Static resx:ResUI.LvTestIpPurity}" />
 
                     <base:MyDGTextColumn
                         x:Name="colTodayDown"
