@@ -106,4 +106,46 @@ public class IpPurityParseTests
         var result = ConnectionHandler.ParseIpPurity(json);
         await ((object?)result).Should().BeNull();
     }
+
+    [Test]
+    public async Task IpApiFallback_HostingExitShouldBeLowestPurity()
+    {
+        var json = """{"status":"success","countryCode":"SG","city":"Singapore","mobile":false,"proxy":true,"hosting":true,"query":"56.10.152.4"}""";
+
+        var result = ConnectionHandler.ParseIpApiRisk(json);
+
+        await result.HasValue.Should().BeTrue();
+        await result.Value.Purity.Should().BeEqualTo(25);
+        await result.Value.Type.Should().BeEqualTo(ResUI.IpPurityHosting);
+        await result.Value.Ip.Should().BeEqualTo("56.10.152.4");
+    }
+
+    [Test]
+    public async Task IpApiFallback_ProxyWithoutHostingShouldReportProxyExit()
+    {
+        var json = """{"status":"success","mobile":false,"proxy":true,"hosting":false,"query":"192.0.2.20"}""";
+
+        var result = ConnectionHandler.ParseIpApiRisk(json);
+
+        await result.Value.Purity.Should().BeEqualTo(60);
+        await result.Value.Type.Should().BeEqualTo(ResUI.IpPurityProxy);
+    }
+
+    [Test]
+    public async Task IpApiFallback_CleanExitShouldReportResidential()
+    {
+        var json = """{"status":"success","mobile":false,"proxy":false,"hosting":false,"query":"192.0.2.21"}""";
+
+        var result = ConnectionHandler.ParseIpApiRisk(json);
+
+        await result.Value.Purity.Should().BeEqualTo(90);
+        await result.Value.Type.Should().BeEqualTo(ResUI.IpPurityResidential);
+    }
+
+    [Test]
+    public async Task IpApiFallback_FailedStatusShouldReturnNull()
+    {
+        var result = ConnectionHandler.ParseIpApiRisk("""{"status":"fail","message":"reserved range"}""");
+        await ((object?)result).Should().BeNull();
+    }
 }

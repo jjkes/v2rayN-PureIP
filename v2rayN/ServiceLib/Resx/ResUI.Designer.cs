@@ -5678,5 +5678,14 @@ namespace ServiceLib.Resx {
                 return ResourceManager.GetString("IpPurityBroadcast", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 Proxy exit 的本地化字符串。
+        /// </summary>
+        public static string IpPurityProxy {
+            get {
+                return ResourceManager.GetString("IpPurityProxy", resourceCulture);
+            }
+        }
     }
 }

@@ -23,3 +23,19 @@ public readonly record struct IpPurityResult(int Purity, string Type, string? Ip
         return $"{Purity}% {Type}";
     }
 }
+
+/// <summary>
+/// Fallback source payload (ip-api.com) used when ippure is blocked (e.g. Cloudflare
+/// challenge on proxy exits). Provides proxy/hosting/mobile flags only.
+/// </summary>
+internal class IpApiRiskInfo
+{
+    public string? status { get; set; }
+    public bool? proxy { get; set; }
+    public bool? hosting { get; set; }
+    public bool? mobile { get; set; }
+    public string? query { get; set; }
+    public string? city { get; set; }
+    public string? countryCode { get; set; }
+    public string? isp { get; set; }
+}

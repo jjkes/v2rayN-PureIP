@@ -562,7 +562,16 @@ public class SpeedtestService(Config config, Func<SpeedTestResult, Task> updateF
             DisposeHandler = true,
         };
 
-        var result = await ConnectionHandler.GetIpPurityInfo(downloadHandle, linkedCt);
+        IpPurityResult? result;
+        try
+        {
+            result = await ConnectionHandler.GetIpPurityInfo(downloadHandle, linkedCt);
+        }
+        catch (OperationCanceledException) when (!ct.IsCancellationRequested)
+        {
+            // Per-node timeout: report a skip instead of failing the whole batch.
+            result = null;
+        }
         if (result is null)
         {
             await UpdateIpPurityFunc(it.IndexId, ResUI.SpeedtestingSkip);

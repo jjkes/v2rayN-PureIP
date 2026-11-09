@@ -1993,4 +1993,7 @@
   <data name="IpPurityBroadcast" xml:space="preserve">
     <value>廣播機房</value>
   </data>
+  <data name="IpPurityProxy" xml:space="preserve">
+    <value>代理出口</value>
+  </data>
 </root>

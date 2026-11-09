@@ -1992,4 +1992,7 @@ The "Get Certificate" action may fail if a self-signed certificate is used or if
   <data name="IpPurityBroadcast" xml:space="preserve">
     <value>Broadcast</value>
   </data>
+  <data name="IpPurityProxy" xml:space="preserve">
+    <value>Proxy exit</value>
+  </data>
 </root>

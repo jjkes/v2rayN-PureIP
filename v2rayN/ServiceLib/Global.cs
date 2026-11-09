@@ -723,9 +723,12 @@ public class Global
         @""
     ];
 
+    public const string IpPurityFallbackUrl = @"http://ip-api.com/json/?fields=status,proxy,hosting,mobile,query,city,countryCode,isp";
+
     public static readonly List<string> IpPurityUrls =
     [
         @"https://my.ippure.com/v1/info",
+        IpPurityFallbackUrl,
         ""
     ];
 
