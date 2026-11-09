@@ -146,4 +146,128 @@ public static class ConnectionHandler
             return null;
         }
     }
+
+    /// <summary>
+    /// Gets IP purity information using the given proxy handler.
+    /// Tries the configured endpoint first (ippure by default) and falls back to
+    /// ip-api.com when the primary source is blocked or returns an unusable payload.
+    /// </summary>
+    public static async Task<IpPurityResult?> GetIpPurityInfo(DownloadService downloadHandle,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var url = AppManager.Instance.Config.SpeedTestItem.IpPurityUrl;
+            if (url.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            var result = await TryGetIpPurityAsync(downloadHandle, url, cancellationToken);
+            if (result is not null)
+            {
+                return result;
+            }
+
+            if (url != Global.IpPurityFallbackUrl)
+            {
+                return await TryGetIpPurityAsync(downloadHandle, Global.IpPurityFallbackUrl, cancellationToken);
+            }
+            return null;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static async Task<IpPurityResult?> TryGetIpPurityAsync(DownloadService downloadHandle, string url,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var payload = await downloadHandle.TryDownloadString(url, cancellationToken);
+            if (payload.IsNullOrEmpty())
+            {
+                return null;
+            }
+            return ParseIpPurity(payload) ?? ParseIpApiRisk(payload);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public static IpPurityResult? ParseIpPurity(string? json)
+    {
+        try
+        {
+            if (json.IsNullOrEmpty())
+            {
+                return null;
+            }
+            var info = JsonUtils.Deserialize<IpPurityInfo>(json);
+            if (info?.fraudScore is null)
+            {
+                return null;
+            }
+            var purity = Math.Clamp(100 - info.fraudScore.Value, 0, 100);
+            var type = info.isBroadcast == true
+                ? ResUI.IpPurityBroadcast
+                : info.isResidential == true ? ResUI.IpPurityResidential : ResUI.IpPurityHosting;
+            return new IpPurityResult(purity, type, info.ip);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Heuristic purity from the ip-api.com fallback. It has no fraud score, so the
+    /// score only distinguishes hosting/proxy/mobile exits and is deliberately coarse.
+    /// </summary>
+    public static IpPurityResult? ParseIpApiRisk(string? json)
+    {
+        try
+        {
+            if (json.IsNullOrEmpty())
+            {
+                return null;
+            }
+            var info = JsonUtils.Deserialize<IpApiRiskInfo>(json);
+            if (info is null || !string.Equals(info.status, "success", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+            if (info.hosting is null && info.proxy is null && info.mobile is null)
+            {
+                return null;
+            }
+
+            var hosting = info.hosting == true;
+            var proxy = info.proxy == true;
+            var purity = hosting && proxy ? 25
+                : hosting ? 40
+                : proxy ? 60
+                : 90;
+            var type = hosting ? ResUI.IpPurityHosting
+                : proxy ? ResUI.IpPurityProxy
+                : ResUI.IpPurityResidential;
+            return new IpPurityResult(purity, type, info.query);
+        }
+        catch
+        {
+            return null;
+        }
+    }
 }

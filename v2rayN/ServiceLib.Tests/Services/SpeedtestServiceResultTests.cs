@@ -17,6 +17,19 @@ public class SpeedtestServiceResultTests
         await profileEx.Speed.Should().BeEqualTo((decimal)expected);
     }
 
+    [Test]
+    public async Task StartingIpPurityTest_ShouldClearTheLastPurity()
+    {
+        var indexId = Guid.NewGuid().ToString();
+        ProfileExManager.Instance.SetTestIpPurity(indexId, 96, ResUI.IpPurityResidential);
+
+        await SetTestResult([new() { IndexId = indexId }], ESpeedActionType.IpPurityTest, ResUI.Speedtesting);
+
+        var profileEx = (await ProfileExManager.Instance.GetProfileExs()).First(t => t.IndexId == indexId);
+        await profileEx.IpPurity.Should().BeEqualTo(0);
+        await profileEx.IpPurityInfo.Should().BeEqualTo(ResUI.Speedtesting);
+    }
+
     private static Task SetTestResult(List<ServerTestItem> items, ESpeedActionType actionType, string message)
     {
         var service = new SpeedtestService(new Config { SpeedTestItem = new() }, _ => Task.CompletedTask);

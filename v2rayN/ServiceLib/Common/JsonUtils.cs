@@ -211,6 +211,8 @@ public class JsonUtils
 [JsonSerializable(typeof(DNSItem))]
 [JsonSerializable(typeof(SimpleDNSItem))]
 [JsonSerializable(typeof(IPAPIInfo))]
+[JsonSerializable(typeof(IpPurityInfo))]
+[JsonSerializable(typeof(IpApiRiskInfo))]
 [JsonSerializable(typeof(SsSIP008))]
 [JsonSerializable(typeof(List<SsServer>))]
 [JsonSerializable(typeof(SsServer))]

@@ -28,6 +28,11 @@ public partial class ProfileItemModel : ReactiveObject
     [Reactive]
     public partial string IpInfo { get; set; }
 
+    public int IpPurity { get; set; }
+
+    [Reactive]
+    public partial string IpPurityVal { get; set; }
+
     [Reactive]
     public partial string TodayUp { get; set; }
 

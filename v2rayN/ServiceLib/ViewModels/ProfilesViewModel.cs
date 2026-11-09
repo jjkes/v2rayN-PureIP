@@ -75,6 +75,7 @@ public partial class ProfilesViewModel : MyReactiveObject
     public ReactiveCommand<RxVoid, RxVoid> SortServerResultCmd { get; }
     public ReactiveCommand<RxVoid, RxVoid> RemoveInvalidServerResultCmd { get; }
     public ReactiveCommand<RxVoid, RxVoid> FastRealPingCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> IpPurityTestServerCmd { get; }
 
     //servers export
     public ReactiveCommand<RxVoid, RxVoid> Export2ClientConfigCmd { get; }
@@ -174,6 +175,10 @@ public partial class ProfilesViewModel : MyReactiveObject
         {
             await ServerSpeedtest(ESpeedActionType.FastRealping);
         });
+        IpPurityTestServerCmd = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await ServerSpeedtest(ESpeedActionType.IpPurityTest);
+        }, canEditRemove);
         MixedTestServerCmd = ReactiveCommand.CreateFromTask(async () =>
         {
             await ServerSpeedtest(ESpeedActionType.Mixedtest);
@@ -297,6 +302,14 @@ public partial class ProfilesViewModel : MyReactiveObject
         if (result.IpInfo.IsNotEmpty())
         {
             item.IpInfo = result.IpInfo ?? string.Empty;
+        }
+        if (result.IpPurityInfo.IsNotEmpty())
+        {
+            item.IpPurityVal = result.IpPurityInfo ?? string.Empty;
+        }
+        if (result.IpPurity is not null)
+        {
+            item.IpPurity = result.IpPurity.Value;
         }
         await Task.CompletedTask;
     }
@@ -427,6 +440,8 @@ public partial class ProfilesViewModel : MyReactiveObject
                         DelayVal = t33?.Delay != 0 ? $"{t33?.Delay}" : string.Empty,
                         SpeedVal = t33?.Speed > 0 ? $"{t33?.Speed}" : t33?.Message ?? string.Empty,
                         IpInfo = t33?.IpInfo ?? string.Empty,
+                        IpPurity = t33?.IpPurity ?? 0,
+                        IpPurityVal = t33?.IpPurity > 0 ? $"{t33.IpPurity}% {t33.IpPurityInfo}" : t33?.IpPurityInfo ?? string.Empty,
                         TodayDown = t22 == null ? "" : Utils.HumanFy(t22.TodayDown),
                         TodayUp = t22 == null ? "" : Utils.HumanFy(t22.TodayUp),
                         TotalDown = t22 == null ? "" : Utils.HumanFy(t22.TotalDown),
@@ -748,6 +763,10 @@ public partial class ProfilesViewModel : MyReactiveObject
 
         if (lstSelected is null || lstSelected.Count <= 0)
         {
+            if (actionType == ESpeedActionType.IpPurityTest)
+            {
+                NoticeManager.Instance.Enqueue(ResUI.PleaseSelectServer);
+            }
             return;
         }
 

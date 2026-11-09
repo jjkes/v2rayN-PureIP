@@ -1974,4 +1974,25 @@ The "Get Certificate" action may fail if a self-signed certificate is used or if
   <data name="TransportPathTip6" xml:space="preserve">
     <value>XDRIVE remote folder</value>
   </data>
+  <data name="menuIpPurityTestServer" xml:space="preserve">
+    <value>IP purity test</value>
+  </data>
+  <data name="LvTestIpPurity" xml:space="preserve">
+    <value>IP purity</value>
+  </data>
+  <data name="TbSettingsIpPurityUrl" xml:space="preserve">
+    <value>IP purity test URL</value>
+  </data>
+  <data name="IpPurityResidential" xml:space="preserve">
+    <value>Residential</value>
+  </data>
+  <data name="IpPurityHosting" xml:space="preserve">
+    <value>Hosting</value>
+  </data>
+  <data name="IpPurityBroadcast" xml:space="preserve">
+    <value>Broadcast</value>
+  </data>
+  <data name="IpPurityProxy" xml:space="preserve">
+    <value>Proxy exit</value>
+  </data>
 </root>

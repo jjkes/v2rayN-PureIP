@@ -1966,4 +1966,25 @@
   <data name="TransportPathTip6" xml:space="preserve">
     <value>XDRIVE 远端目录</value>
   </data>
+  <data name="menuIpPurityTestServer" xml:space="preserve">
+    <value>IP 纯净度测试</value>
+  </data>
+  <data name="LvTestIpPurity" xml:space="preserve">
+    <value>纯净度</value>
+  </data>
+  <data name="TbSettingsIpPurityUrl" xml:space="preserve">
+    <value>IP 纯净度测试地址</value>
+  </data>
+  <data name="IpPurityResidential" xml:space="preserve">
+    <value>原生住宅</value>
+  </data>
+  <data name="IpPurityHosting" xml:space="preserve">
+    <value>机房</value>
+  </data>
+  <data name="IpPurityBroadcast" xml:space="preserve">
+    <value>广播机房</value>
+  </data>
+  <data name="IpPurityProxy" xml:space="preserve">
+    <value>代理出口</value>
+  </data>
 </root>

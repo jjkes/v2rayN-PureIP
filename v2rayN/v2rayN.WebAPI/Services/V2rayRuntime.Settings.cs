@@ -81,6 +81,7 @@ public sealed partial class V2rayRuntime
                 Config.SpeedTestItem.SpeedPingTestUrl,
                 Config.SpeedTestItem.MixedConcurrencyCount,
                 Config.SpeedTestItem.IPAPIUrl,
+                Config.SpeedTestItem.IpPurityUrl,
                 Config.SpeedTestItem.UdpTestTarget),
             Config.RoutingBasicItem.DomainStrategy,
             Config.RoutingBasicItem.DomainStrategy4Singbox,
@@ -243,6 +244,7 @@ public sealed partial class V2rayRuntime
                 Config.SpeedTestItem.SpeedPingTestUrl = speed.SpeedPingTestUrl;
                 Config.SpeedTestItem.MixedConcurrencyCount = Math.Max(speed.MixedConcurrencyCount, Global.SpeedTestConcurrencyCountMin);
                 Config.SpeedTestItem.IPAPIUrl = speed.IPAPIUrl;
+                Config.SpeedTestItem.IpPurityUrl = speed.IpPurityUrl ?? string.Empty;
                 Config.SpeedTestItem.UdpTestTarget = speed.UdpTestTarget;
 
                 EnsureCoreTypeMappings();
@@ -430,6 +432,7 @@ public sealed partial class V2rayRuntime
             Config.SpeedTestItem.SpeedPingTestUrl = input.SpeedPingTestUrl;
             Config.SpeedTestItem.MixedConcurrencyCount = Math.Max(input.MixedConcurrencyCount, Global.SpeedTestConcurrencyCountMin);
             Config.SpeedTestItem.IPAPIUrl = input.IPAPIUrl;
+            Config.SpeedTestItem.IpPurityUrl = input.IpPurityUrl ?? string.Empty;
             Config.SpeedTestItem.UdpTestTarget = input.UdpTestTarget;
             await EnsureConfigSaveSucceededAsync(() => ConfigHandler.SaveConfig(Config));
         });

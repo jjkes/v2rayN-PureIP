@@ -1975,4 +1975,25 @@
   <data name="TransportPathTip6" xml:space="preserve">
     <value>XDRIVE 遠端目錄</value>
   </data>
+  <data name="menuIpPurityTestServer" xml:space="preserve">
+    <value>IP 純淨度測試</value>
+  </data>
+  <data name="LvTestIpPurity" xml:space="preserve">
+    <value>純淨度</value>
+  </data>
+  <data name="TbSettingsIpPurityUrl" xml:space="preserve">
+    <value>IP 純淨度測試地址</value>
+  </data>
+  <data name="IpPurityResidential" xml:space="preserve">
+    <value>原生住宅</value>
+  </data>
+  <data name="IpPurityHosting" xml:space="preserve">
+    <value>機房</value>
+  </data>
+  <data name="IpPurityBroadcast" xml:space="preserve">
+    <value>廣播機房</value>
+  </data>
+  <data name="IpPurityProxy" xml:space="preserve">
+    <value>代理出口</value>
+  </data>
 </root>

@@ -543,6 +543,7 @@ public sealed partial class V2rayRuntime
             delay,
             speed,
             ipInfo = result.IpInfo,
+            ipPurity = result.IpPurityInfo,
             rawResult = delay is null && speed is null ? (result.Delay ?? result.Speed) : null,
         });
         if (!string.IsNullOrEmpty(result.IndexId))
